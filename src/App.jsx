@@ -8,6 +8,7 @@ function App() {
 
   return (
     <> 
+    {/* <> and </> are called as fragments using which we can use multiple divs in the same function return*/}
    <div>
     <p>hello world!</p>
    </div>
