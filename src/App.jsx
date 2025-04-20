@@ -11,14 +11,17 @@ function App() {
    <div>
     <p>hello world!</p>
    </div>
-    <Text />
+    <Text display="hello!!!!"/>
+    <Text display="what's up"></Text>
    </>
   )
 }
 
-function Text() {
+function Text({display}) {    /* here, 'display' is the prop */
   return (
-  <div>hello world text!</div>
+  <div>
+    <p>Hey, {display}</p>
+  </div>
   );
 }
 
