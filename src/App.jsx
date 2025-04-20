@@ -1,29 +1,15 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import MovieCard from './components/MovieCard'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <> 
-    {/* <> and </> are called as fragments using which we can use multiple divs in the same function return*/}
-   <div>
-    <p>hello world!</p>
-   </div>
-    <Text display="hello!!!!"/>
-    <Text display="what's up"></Text>
+    <MovieCard movie={{title: "Interstellar", release_date: "2013"}}/>
+    <MovieCard movie={{title: "Kal Ho Na Ho", release_date: "2009"}}/>
+
    </>
   )
-}
-
-function Text({display}) {    /* here, 'display' is the prop */
-  return (
-  <div>
-    <p>Hey, {display}</p>
-  </div>
-  );
 }
 
 export default App
