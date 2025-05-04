@@ -2,10 +2,16 @@ import '../css/MovieCard.css';
 import { useFavorites } from "../context/FavoriteContext";
 
 function MovieCard({ movie }) {
-    const { addFavorite } = useFavorites();
+    const { favorites, addFavorite, removeFavorite } = useFavorites();
+
+    const isFavorite = favorites.some((m) => m.imdbID === movie.imdbID);
 
     function onFavoriteClick() {
-        addFavorite(movie);
+        if (isFavorite) {
+            removeFavorite(movie.imdbID);
+        } else {
+            addFavorite(movie);
+        }
     }
 
     return (
@@ -14,7 +20,7 @@ function MovieCard({ movie }) {
                 <img src={movie.Poster} alt={movie.Title} />
                 <div className="movie-overlay">
                     <button className="favorite-btn" onClick={onFavoriteClick}>
-                        💓
+                        {isFavorite ? "❌" : "💓"}
                     </button>
                 </div>
             </div>

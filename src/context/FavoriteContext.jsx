@@ -11,8 +11,12 @@ export function FavoriteProvider({ children }) {
         }
     };
 
+    const removeFavorite = (movieId) => {
+        setFavorites(favorites.filter((m) => m.imdbID !== movieId));
+    };
+
     return (
-        <FavoriteContext.Provider value={{ favorites, addFavorite }}>
+        <FavoriteContext.Provider value={{ favorites, addFavorite, removeFavorite }}>
             {children}
         </FavoriteContext.Provider>
     );
