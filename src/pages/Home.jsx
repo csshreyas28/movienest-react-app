@@ -1,53 +1,77 @@
+
+import { useState, useEffect } from "react";
 import MovieCard from "../components/MovieCard";
-import { useState } from "react";
+import { fetchMovies } from "../services/api";
 import '../css/Home.css';
 
+const defaultPopularTitles = [
+    "Inception", "Interstellar", "The Dark Knight", "Avengers: Endgame",
+"Terminator", "Guardians of the Galaxy", "Fast and Furious", "Daredevil"
+
+];
+
 function Home() {
-
     const [searchQuery, setSearchQuery] = useState("");
+    const [movies, setMovies] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [noResults, setNoResults] = useState(false);
 
-    const movies = [
-        { id: 1, title: "Interstellar", release_date: "2013" },
-        { id: 2, title: "Inception", release_date: "2010" },
-        { id: 3, title: "The Dark Knight", release_date: "2008" },
-        { id: 4, title: "The Matrix", release_date: "1999" },
-        { id: 5, title: "The Shawshank Redemption", release_date: "1994" },
-        { id: 6, title: "Pulp Fiction", release_date: "1994" },
-        { id: 7, title: "The Godfather", release_date: "1972" },
-        { id: 8, title: "Forrest Gump", release_date: "1994" },
-        { id: 9, title: "Fight Club", release_date: "1999" },
-        { id: 10, title: "The Lord of the Rings: The Return of the King", release_date: "2003" },
-    ]
+    useEffect(() => {
+        const loadPopularMovies = async () => {
+            setLoading(true);
+            const allResults = [];
 
-    const handleSearch = (e) => {
+            for (let title of defaultPopularTitles) {
+                const results = await fetchMovies(title);
+                if (results.length > 0) {
+                    allResults.push(results[0]);
+                }
+            }
+
+            setMovies(allResults);
+            setLoading(false);
+        };
+
+        loadPopularMovies();
+    }, []);
+
+    const handleSearch = async (e) => {
         e.preventDefault();
-        alert(searchQuery);
-        setSearchQuery("------------");
-    }
+        setLoading(true);
+        const results = await fetchMovies(searchQuery);
+        setMovies(results);
+        setNoResults(results.length === 0);
+        setLoading(false);
+    };
 
     return (
-        <>
-            <div className="home">
-
-                <form onSubmit={handleSearch} className="search-form">
+        <div className="home">
+            <form onSubmit={handleSearch} className="search-form">
                 <input 
-                type="text" 
-                placeholder="Search for a movie..." 
-                className="search-input" 
-                value={searchQuery} 
-                onChange={(e) => setSearchQuery(e.target.value)}/>
+                    type="text" 
+                    placeholder="Search for a movie..." 
+                    className="search-input" 
+                    value={searchQuery} 
+                    onChange={(e) => setSearchQuery(e.target.value)} 
+                />
                 <button type="submit" className="search-button">Search</button>
-                </form>
+            </form>
 
-                <div className="movies-grid">
-                    {movies.map((movie) => 
-                        (
-                        <MovieCard movie={movie} key={movie.id} />
-                        )
-                        )}
+            {loading && <p className="loading-text">Loading movies...</p>}
+
+            {!loading && noResults && (
+                <div className="no-results">
+                    <h3>No movies found</h3>
+                    <p>Try searching for something else</p>
                 </div>
+            )}
+
+            <div className="movies-grid">
+                {!loading && movies.map((movie) => (
+                    <MovieCard key={movie.imdbID} movie={movie} />
+                ))}
             </div>
-        </>
+        </div>
     );
 }
 

@@ -1,24 +1,26 @@
 import '../css/MovieCard.css';
+import { useFavorites } from "../context/FavoriteContext";
 
-function MovieCard({movie}) {
+function MovieCard({ movie }) {
+    const { addFavorite } = useFavorites();
 
     function onFavoriteClick() {
-        alert("clicked")
+        addFavorite(movie);
     }
-    return  (
+
+    return (
         <div className="movie-card">
             <div className="movie-poster">
-                <img src="{movie.url}" alt="{movie.title}" />
+                <img src={movie.Poster} alt={movie.Title} />
                 <div className="movie-overlay">
                     <button className="favorite-btn" onClick={onFavoriteClick}>
                         💓
                     </button>
                 </div>
             </div>
-
             <div className="movie-info">
-                <h3>{movie.title}</h3>
-                <p>{movie.release_date}</p>
+                <h3>{movie.Title}</h3>
+                <p>{movie.Year}</p>
             </div>
         </div>
     );
